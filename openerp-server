@@ -215,7 +215,7 @@ def configure_babel_localedata_path():
 
 if __name__ == "__main__":
 
-    os.environ["TZ"] = "UTC"
+    os.environ["TZ"] = "Asia/Bangkok"
 
     check_root_user()
     openerp.tools.config.parse_config(sys.argv[1:])
