@@ -297,9 +297,9 @@ class account_invoice(osv.osv):
         'internal_number': False,
         'user_id': lambda s, cr, u, c: u,
     }
-    _sql_constraints = [
-        ('number_uniq', 'unique(number, company_id, journal_id, type)', 'Invoice Number must be unique per Company!'),
-    ]
+    #_sql_constraints = [
+        #('number_uniq', 'unique(number, company_id, journal_id, type)', 'Invoice Number must be unique per Company!'),
+    #]
 
     def fields_view_get(self, cr, uid, view_id=None, view_type=False, context=None, toolbar=False, submenu=False):
         journal_obj = self.pool.get('account.journal')
