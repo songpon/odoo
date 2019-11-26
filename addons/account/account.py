@@ -1279,6 +1279,38 @@ class account_move(osv.osv):
             return [('id', 'in', tuple(ids))]
         return [('id', '=', '0')]
 
+    # Somethime partner store not correctly
+    # when not 100% have partner_id in lines
+    def _get_partner_id(self,cr,uid,ids,name,arg,context=None):
+        cr.execute('''
+            SELECT l.move_id,
+                   l.partner_id
+            FROM account_move m,
+                 account_move_line l
+            WHERE l.move_id=m.id
+              AND l.partner_id IS NOT NULL
+              AND m.id IN %s
+            GROUP BY l.move_id,
+                     l.partner_id
+        ''',(tuple(ids),))
+        data = dict( cr.fetchall())
+        res={}
+        for id in ids:
+            res[id]=data.get(id,False)
+        return res
+
+    def _get_move_line(self, cr, uid, ids, context=None):
+        cr.execute('''
+            SELECT move_id
+            FROM account_move_line
+            WHERE id IN %s
+              AND partner_id IS NOT NULL
+            GROUP BY move_id ''',(tuple(ids),)
+            )
+        res = map(lambda x:x[0] , cr.fetchall())
+        return res
+
+
     _columns = {
         'name': fields.char('Number', size=64, required=True),
         'ref': fields.char('Reference', size=64),
@@ -1288,7 +1320,12 @@ class account_move(osv.osv):
             help='All manually created new journal entries are usually in the state \'Unposted\', but you can set the option to skip that state on the related journal. In that case, they will be behave as journal entries automatically created by the system on document validation (invoices, bank statements...) and will be created in \'Posted\' state.'),
         'line_id': fields.one2many('account.move.line', 'move_id', 'Entries', states={'posted':[('readonly',True)]}),
         'to_check': fields.boolean('To Review', help='Check this box if you are unsure of that journal entry and if you want to note it as \'to be reviewed\' by an accounting expert.'),
-        'partner_id': fields.related('line_id', 'partner_id', type="many2one", relation="res.partner", string="Partner", store=True),
+        "partner_id":fields.function(_get_partner_id,method=True,type="many2one",relation="res.partner",string="Partner",
+            store={
+                'account.move.line': (_get_move_line, ['partner_id'], 20),
+            }
+        ),
+
         'amount': fields.function(_amount_compute, string='Amount', digits_compute=dp.get_precision('Account'), type='float', fnct_search=_search_amount),
         'date': fields.date('Date', required=True, states={'posted':[('readonly',True)]}, select=True),
         'narration':fields.text('Internal Note'),
