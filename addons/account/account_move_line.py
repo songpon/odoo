@@ -462,9 +462,10 @@ class account_move_line(osv.osv):
 
     def _get_move_lines(self, cr, uid, ids, context=None):
         result = []
-        for move in self.pool.get('account.move').browse(cr, uid, ids, context=context):
-            for line in move.line_id:
-                result.append(line.id)
+        cr.execute("""
+            select id from account_move_line where move_id in %s
+        """,(tuple(ids),))
+        result = map(lambda x:x[0],cr.fetchall())
         return result
 
     _columns = {
@@ -477,7 +478,7 @@ class account_move_line(osv.osv):
         'account_id': fields.many2one('account.account', 'Account', required=True, ondelete="cascade", domain=[('type','<>','view'), ('type', '<>', 'closed')], select=2),
         'move_id': fields.many2one('account.move', 'Move', ondelete="cascade", help="The move of this entry line.", select=2, required=True),
         'narration': fields.related('move_id','narration', type='text', relation='account.move', string='Internal Note'),
-        'ref': fields.related('move_id', 'ref', string='Reference', type='char', size=64, store=True),
+        'ref': fields.char('Ref', size=64), #Need to be normal fields.char becuase it should be able to field
         'statement_id': fields.many2one('account.bank.statement', 'Statement', help="The bank statement used for bank reconciliation", select=1),
         'reconcile_id': fields.many2one('account.move.reconcile', 'Reconcile', readonly=True, ondelete='set null', select=2),
         'reconcile_partial_id': fields.many2one('account.move.reconcile', 'Partial Reconcile', readonly=True, ondelete='set null', select=2),
