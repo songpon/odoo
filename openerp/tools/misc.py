@@ -1135,5 +1135,15 @@ class UnquoteEvalContext(defaultdict):
 
     def __missing__(self, key):
         return unquote(key)
-
+        
+def track_time(func):
+    """A decorator to track the time before and after a function and print
+    the time elapsed
+    """
+    def wrapper(*args, **kwargs):
+        start_time = time.time()
+        res = func(*args, **kwargs)
+        print 'Total time taken: ',func.func_name, time.time() - start_time
+        return res
+    return wrapper
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
