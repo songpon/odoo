@@ -2,7 +2,7 @@ Babel==2.6.0
 certifi==2019.9.11
 chardet==3.0.4
 dateutils==0.6.6
-egenix-mx-base==3.2.9
+# egenix-mx-base==3.2.9
 idna==2.8
 lxml==4.3.2
 Mako==1.0.7
