@@ -10,14 +10,13 @@ MarkupSafe==1.1.1
 numpy==1.16.2
 Pillow==5.4.1
 progressbar2==3.39.3
-psycopg2==2.7.7
-pyaml==3.13
+psycopg2-binary==2.7.7
+pyyaml==3.13
 Python-Chart==1.39
 python-dateutil==2.8.0
 python-openid==2.2.5
 python-utils==2.3.0
 pytz==2018.9
-PyYAML==5.1
 reportlab==3.5.13
 requests==2.22.0
 simplejson==3.16.0
