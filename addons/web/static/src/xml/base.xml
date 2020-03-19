@@ -41,7 +41,7 @@
     <tr>
         <td colspan="2">
             <div id="oe_footer" class="oe_footer">
-                <p class="oe_footer_powered">Powered by <a href="http://www.openerp.com">OpenERP</a></p>
+                <p class="oe_footer_powered">Powered by <a href="https://www.digital.organic">Digital Organic</a></p>
             </div>
         </td>
     </tr>
@@ -311,8 +311,8 @@
         </ul>
       </form>
       <div class="footer">
-        <a href="#" id="oe-db-config">Manage Databases</a> |
-        <a href="http://www.openerp.com">Powered by <span class="openerp">OpenERP</span></a>
+        
+        <a href="https://www.digital.organic">Powered by <span class="openerp">Digital Organic</span></a>
       </div>
     </div>
   </div>
